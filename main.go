@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type DataFeriado struct {
 	Nome string
@@ -10,6 +13,8 @@ type DataFeriado struct {
 
 func main() {
 	fmt.Printf("Feriadou")
+
+	anoAtual := time.Now().Year()
 
 	feriadosFixos := []DataFeriado{
 		{"Confraternização Universal", "01", "01"},
@@ -26,7 +31,7 @@ func main() {
 		fmt.Printf("%s/%s - %s\n",feriados.Dia, feriados.Mes, feriados.Nome)
 	}
 
-	dataPascoa := FormulaDeGauss(2023)
+	dataPascoa := FormulaDeGauss(anoAtual)
 	
 	fmt.Printf("%s/%s - %s\n",dataPascoa.Dia, dataPascoa.Mes, dataPascoa.Nome)
 }
@@ -50,6 +55,13 @@ func FormulaDeGauss(ano int) DataFeriado {
 	} else {
 		dia = d+e+22
 		mes = 3
+	}
+
+	switch {
+	case mes == 4 && dia == 26:
+			dia = 19
+	case mes == 4 && dia == 25 && d == 28 && a > 10:
+			dia = 18
 	}
 
 	return DataFeriado{"Páscoa", fmt.Sprintf("%02d", dia), fmt.Sprintf("%02d", mes)} 
