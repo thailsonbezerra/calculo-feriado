@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -31,13 +32,13 @@ func main() {
 		fmt.Printf("%s/%s - %s\n",feriados.Dia, feriados.Mes, feriados.Nome)
 	}
 
-	dataPascoa := FormulaDeGauss(anoAtual)
-	
-	fmt.Printf("%s/%s - %s\n",dataPascoa.Dia, dataPascoa.Mes, dataPascoa.Nome)
+	dataPascoa := definirPascoa(anoAtual)
+	fmt.Print(dataPascoa)
+
 }
 
 //FormulaDeGauss é utilizada para calcular o dia da Páscoa. A fórmula vale para anos entre 1901 e 2099. A fórmula pode ser estendida para outros anos, alterando X e Y (criada por Gauss até 1999 e estendida pelo autor até 2299)
-func FormulaDeGauss(ano int) DataFeriado {
+func definirPascoa(ano int) time.Time {
 	X := 24
 	Y := 5
 	a := ano%19
@@ -64,6 +65,15 @@ func FormulaDeGauss(ano int) DataFeriado {
 			dia = 18
 	}
 
-	return DataFeriado{"Páscoa", fmt.Sprintf("%02d", dia), fmt.Sprintf("%02d", mes)} 
+	domingoPascoa := fmt.Sprintf("%s/%s/%d", fmt.Sprintf("%02d",dia), fmt.Sprintf("%02d",mes), ano)
+	formatoData := "02/01/2006"
+	dataPascoa, err := time.Parse(formatoData, domingoPascoa)
+
+	if err != nil {
+		log.Fatal("Erro ao fazer o parsing da data:", err)
+	}
+
+
+	return dataPascoa 
 
 }
