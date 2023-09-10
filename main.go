@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"time"
 )
 
@@ -12,12 +13,26 @@ type DataFeriado struct {
 	Mes string
 }
 
+type OrdernarPorData []DataFeriado
+
+func (f OrdernarPorData) Len() int           { return len(f) }
+func (f OrdernarPorData) Swap(i, j int)      { f[i], f[j] = f[j], f[i] }
+func (f OrdernarPorData) Less(i, j int) bool { 
+	if f[i].Mes != f[j].Mes {
+		return f[i].Mes < f[j].Mes
+	}
+
+	return f[i].Dia < f[j].Dia
+ }
+
 func main() {
 	dataAtual := time.Now().Format("02/01")
 	anoAtual := time.Now().Year()
 
 	feriados := obterFeriadosAno(anoAtual)
-	fmt.Print(feriados)
+	for _, feriado := range feriados {
+		fmt.Printf("%s\n", feriado)
+	}
 	fmt.Printf("=========================\n")
 
 	feriado := ehFeriado(dataAtual, anoAtual)
@@ -110,6 +125,8 @@ func obterFeriadosAno(ano int) []DataFeriado {
 	feriadosMoveis := definirFeriadosMoveis(ano)
 
 	feriados := append(feriadosFixos, feriadosMoveis...)
+
+	sort.Sort(OrdernarPorData(feriados))
 
 	return feriados
 }
