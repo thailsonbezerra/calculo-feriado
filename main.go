@@ -13,26 +13,9 @@ type DataFeriado struct {
 }
 
 func main() {
-	anoAtual := time.Now().Year()
-
-	feriadosFixos := []DataFeriado{
-		{"Confraternização Universal", "01", "01"},
-		{"Tiradentes", "21", "04"},
-		{"Dia do Trabalho", "01","05"},
-		{"Independência do Brasil", "07", "09"},
-		{"Nossa Sr.a Aparecida - Padroeira do Brasil", "12", "10"},
-		{"Finados", "02", "11"},
-		{"Proclamação da República", "15", "11"},
-		{"Natal", "25", "12"},
-	}
-
-	feriadosMoveis := definirFeriadosMoveis(anoAtual)
-
-	feriados := append(feriadosFixos, feriadosMoveis...)
-
-	for _, feriado := range feriados {
-		fmt.Printf("%s/%s - %s\n",feriado.Dia, feriado.Mes, feriado.Nome)
-	}
+	dataAtual := time.Now().Format("02/01")
+	feriado := ehFeriado(dataAtual)
+	fmt.Print(feriado)
 }
 
 //FormulaDeGauss é utilizada para calcular o dia da Páscoa. A fórmula vale para anos entre 1901 e 2099. A fórmula pode ser estendida para outros anos, alterando X e Y (criada por Gauss até 1999 e estendida pelo autor até 2299)
@@ -90,4 +73,33 @@ func definirFeriadosMoveis(ano int) []DataFeriado {
 	}
 
 	return feriadosMoveis
+}
+
+func ehFeriado(data string) bool {
+	anoAtual := time.Now().Year()
+
+	feriadosFixos := []DataFeriado{
+		{"Confraternização Universal", "01", "01"},
+		{"Tiradentes", "21", "04"},
+		{"Dia do Trabalho", "01","05"},
+		{"Independência do Brasil", "07", "09"},
+		{"Nossa Sr.a Aparecida - Padroeira do Brasil", "12", "10"},
+		{"Finados", "02", "11"},
+		{"Proclamação da República", "15", "11"},
+		{"Natal", "25", "12"},
+	}
+
+	feriadosMoveis := definirFeriadosMoveis(anoAtual)
+
+	feriados := append(feriadosFixos, feriadosMoveis...)
+
+	for _, feriado := range feriados {
+		dataFeriado := fmt.Sprintf("%s/%s",feriado.Dia, feriado.Mes)
+		if dataFeriado == data {
+			return true
+		}
+	}
+
+	return false
+
 }
